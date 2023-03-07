@@ -17,7 +17,6 @@ public:
         subset(s,nums,v,nums.size());
         return s;
     }
-};  }
 };
 
 
