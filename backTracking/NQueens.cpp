@@ -1,5 +1,7 @@
 /*
 https://leetcode.com/problems/n-queens/submissions/912800334/
+
+Time Complexity :- O(n!)
 */
 
 
