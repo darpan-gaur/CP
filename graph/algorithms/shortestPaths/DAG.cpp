@@ -25,8 +25,9 @@ void topoSort(int s, vector<bool>& visited, stack<int>& st, vector<pair<int, int
     st.push(s);
 }
 
+// shortest path in DAG, Time :- O(V+E)
 vector<int> shortestPath(int src, vector<pair<int, int>> adj[], int n) {
-    // topo sort
+    // topo sort :- Time :- O(V+E)
     vector<bool> visited(n, false);
     stack<int> st;
     for (int i=0;i<n;i++) {
@@ -37,6 +38,7 @@ vector<int> shortestPath(int src, vector<pair<int, int>> adj[], int n) {
     
     vector<int> dist(n, INT_MAX);
     dist[src] = 0;
+    // Time :- O(V+E)
     while (!st.empty()) {
         int s = st.top();
         st.pop();

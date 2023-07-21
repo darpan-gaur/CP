@@ -17,6 +17,7 @@ void inputGraph(vector<pair<int, int>> adj[], int n, int m) {
     }
 }
 
+// Time :- O(V + ElogV)
 vector<int> dijkstra(vector<pair<int, int>> adj[], int n, int src) {
     vector<int> dist(n, INT_MAX);
     dist[src] = 0;
