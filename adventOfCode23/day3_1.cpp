@@ -3,57 +3,61 @@
 
 using namespace std;
 
-vector<string> input;
-
-bool check(int colS, int colE, int row) {
-    // colS :- n start, colE :- n end +1 
-    for (int i=colS-1;i<=colE;i++) {
-        if (i<0 || i>=input[row].length()) continue;
-        for (int j=row-1;j<=row+1;j++) {
-            if (j<0 || j>=input.size()) continue;
-            // if input[j][i] not a number and not a dot return true
-            if (input[j][i]!='.' && (input[j][i]<'0' || input[j][i]>'9')) return true;
-        }
-    }
-    return false;
-}
-
 int main() {
-    string inp;
-    ll sPartNum=0;
-    while (cin >> inp) {
-        input.push_back(inp);
+    vector<string> input;
+    string line;
+    while (getline(cin, line)) {
+        input.push_back(line);
     }
-    for (int row=0;row<input.size();row++) {
-        for (int col=0;col<input[row].length();col++) {
-            // get number if any
-            ll num=0, ndig=0;
-            if (input[row][col]>='0' && input[row][col]<='9') {
-                // if number is found
-                for (int i=col;i<input[row].length();i++) {
-                    if (input[row][i]>='0' && input[row][i]<='9') {
-                        num = num*10 + (input[row][i]-'0');
-                        ndig++;
-                    } else {
-                        if (check(i-ndig,i,row)) {
-                            cout << num << endl;
-                            sPartNum += num;
-                        }
-                        col = i-1;
-                        ndig=0;
-                        break;
-                    }
-                }
-                if (ndig!=0) {
-                    if (check(col-ndig,col,row)) {
-                        cout << num << endl;
-                        sPartNum += num;
-                    }
-                    col += ndig-1;
-                }
+    // print input
+    // for (auto i : input) {
+    //     cout << i << endl;
+    // }
+
+    // (dx, dy) for dx in {-1,0,1} for dy in {-1,0,1} excluding (0,0)
+    vector<pair<int, int>> adj;
+    for (int dx=-1; dx<=1; dx++) {
+        for (int dy=-1; dy<=1; dy++) {
+            if (dx!=0 || dy!=0) {
+                adj.push_back(make_pair(dx, dy));
             }
         }
     }
-    cout << sPartNum << endl;
+    ll res = 0;
+    bool flag = false;
+    int m = input.size(), n = input[0].size();
+    string num="";
+    for (int i=0;i<m;i++) {
+        for (int j=0;j<n;j++) {
+            char curr = input[i][j];
+            // if curr is digit
+            if (curr >= '0' && curr <= '9') {
+                // if any input[i+dx][j+dy] is digit
+                if (any_of(adj.begin(), adj.end(), [&](pair<int, int> p) {
+                    int dx = p.first, dy = p.second;
+                    int x = i+dx, y = j+dy;
+                    return (x>=0 && x<m && y>=0 && y<n && (input[x][y]!='.') && (input[x][y]<'0' || input[x][y]>'9'));
+                })) {
+                    flag = true;
+                }
+                num += curr;
+            }
+            else {
+                if (flag && num!="") {
+                    res += stoi(num);
+                }
+                num = "";
+                flag = false;
+            }
+        }
+        if (flag && num!="") {
+            res += stoi(num);
+        }
+        num = "";
+        flag = false;
+    }
+    
+    cout << res << endl;
+
     return 0;
 }
